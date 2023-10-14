@@ -3,7 +3,7 @@
 
 
 
-## Proyecto: Contador binario.
+## Proyecto: Parte 1 Parcial Domiciliario SPD.
 ![Tinkercad](img/imagenP1SPD.png)
 
 
