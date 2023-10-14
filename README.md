@@ -50,7 +50,7 @@ contador, y envia la señal del numero.*/
 ~~~
 
 ## :robot: Link al proyecto
-- [proyecto]([https://www.tinkercad.com/things/aOYiibnDjWu](https://www.tinkercad.com/things/fjnY7L9EdeY-p1-parcial-domiciliario-1b-leon-gabriel-martinez-aquino/editel?sharecode=v86fY4R__D4DXNCbGvJF2T4yYxvQ_uRqjpWTVksz6jI)https://www.tinkercad.com/things/fjnY7L9EdeY-p1-parcial-domiciliario-1b-leon-gabriel-martinez-aquino/editel?sharecode=v86fY4R__D4DXNCbGvJF2T4yYxvQ_uRqjpWTVksz6jI])
+- [proyecto]([https://www.tinkercad.com/things/aOYiibnDjWu](https://www.tinkercad.com/things/fjnY7L9EdeY-p1-parcial-domiciliario-1b-leon-gabriel-martinez-aquino/editel?sharecode=v86fY4R__D4DXNCbGvJF2T4yYxvQ_uRqjpWTVksz6jI)https://www.tinkercad.com/things/fjnY7L9EdeY-p1-parcial-domiciliario-1b-leon-gabriel-martinez-aquino/editel?sharecode=v86fY4R__D4DXNCbGvJF2T4yYxvQ_uRqjpWTVksz6jI](https://www.tinkercad.com/things/fjnY7L9EdeY-p1-parcial-domiciliario-1b-leon-gabriel-martinez-aquino/editel?sharecode=v86fY4R__D4DXNCbGvJF2T4yYxvQ_uRqjpWTVksz6jI)https://www.tinkercad.com/things/fjnY7L9EdeY-p1-parcial-domiciliario-1b-leon-gabriel-martinez-aquino/editel?sharecode=v86fY4R__D4DXNCbGvJF2T4yYxvQ_uRqjpWTVksz6jI)
 
 ---
 ### Fuentes
