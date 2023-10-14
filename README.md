@@ -12,19 +12,39 @@ Contador del 0 al 99, utilizando dos display 7 segmentos, utilizando la tecnica 
 numero del contador por medio de 3 botones (boton "sube" - boton "baja" - boton "reset").
 
 ## Función principal
-Esta funcion se encarga de encender y apagar los leds.
+Esta funcion se realiza el efecto de "multiplexacion" y genera un bucle encargado
+de mostrar el digito (decena o unidad) en el display correcto. 
 
 B0, B1, B2, B3 son #define que utilizamos para agregar los leds, asociandolo a pines de la placa arduino.
 
 (Breve explicación de la función)
 
 ~~~ C (lenguaje en el que esta escrito)
-void EncenderBinario(int estado3, int estado2,int estado1,int estado0)
+void PrintContador(int contador)
 {
-  digitalWrite(B3,estado3);
-  digitalWrite(B2,estado2);
-  digitalWrite(B1,estado1);
-  digitalWrite(B0,estado0);
+/*se encarga del efecto de "multiplexacion" y genera un bucle encargado
+de mostrar el digito (decena o unidad) en el display correcto.  
+
+Multiplexacion: es el efecto que se produce al alternar el encendido 
+y apagado de los dos 7 segmentos muy rapido, esto produce el efecto 
+visual de la activacion "simultanea"*/
+  
+  PrendeDigito(APAGADO);
+//apagamos los display
+  PrintDigit(contador / 10);
+/*esta cuenta calcula que valor tiene la decena segun el valor del 
+contador, y envia la señal del numero.*/
+  PrendeDigito(DECENAS);
+//encendemos las decenas y "recibimos el numero a imprimir".
+
+  
+  PrendeDigito(APAGADO);
+//apagamos los display
+  PrintDigit(contador - 10 * ((int)contador / 10));
+/*esta cuenta calcula que valor tiene la unidad segun el valor del 
+contador, y envia la señal del numero.*/
+  PrendeDigito(UNIDAD);
+//encendemos las unidad y "recibimos el numero a imprimir".
 }
 ~~~
 
