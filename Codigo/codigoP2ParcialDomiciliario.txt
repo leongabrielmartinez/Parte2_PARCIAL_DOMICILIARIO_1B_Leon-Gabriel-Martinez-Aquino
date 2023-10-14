@@ -1,5 +1,5 @@
 /*
------------CONSIGNA PRIMER PARCIAL----------------------------------
+-----------CONSIGNA PRIMER PARCIAL (Parte 2)----------------------------------
 1. Sustituye uno de los botones por un interruptor deslizante (switch) de dos posiciones.
 Dependiendo de la posición del interruptor, el display debe mostrar o bien el contador (como
 en la Parte 1) o los números primos en el rango de 0 a 99.
