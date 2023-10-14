@@ -1,0 +1,396 @@
+/*
+-----------CONSIGNA PRIMER PARCIAL----------------------------------
+Diseñar un contador de 0 a 99 utilizando dos displays de 7 segmentos y tres botones para
+controlar la cuenta. Debes implementar la técnica de multiplexación para mostrar los dígitos
+en los displays. El contador debe comenzar en 0 y debe ser capaz de aumentar o disminuir
+su valor en una unidad con los botones.
+---------------------------------------------------------------------
+*/
+#define CERO 10
+#define UNO 11
+#define DOS 12
+#define TRES 13
+#define CUATRO 7
+#define CINCO 6
+#define SEIS 5
+
+#define RESET 2
+#define SUBE 3
+#define BAJA 4
+
+#define DECENAS A5
+#define UNIDAD A4
+
+#define TIME_DISPLAY_ON 10
+//tiempo de alternado en la multiplexacion 
+#define APAGADO 0
+//constantes
+int sube = 0;
+int baja= 0;
+int reset = 0;
+
+int subePrevia = 0;
+int bajaPrevia = 0;
+int resetPrevia = 0;
+
+int contador = 0;
+int pressed = 0;
+//variables
+
+
+void setup()
+{
+  pinMode(CERO, OUTPUT);
+  pinMode(UNO, OUTPUT);
+  pinMode(DOS, OUTPUT);
+  pinMode(TRES, OUTPUT);
+  pinMode(CUATRO, OUTPUT);
+  pinMode(CINCO, OUTPUT);
+  pinMode(SEIS, OUTPUT);
+//salidas conectadas a los led de los 7 segmentos.
+  pinMode(RESET, INPUT_PULLUP);
+  pinMode(SUBE, INPUT_PULLUP);
+  pinMode(BAJA, INPUT_PULLUP);
+//botones.
+  pinMode(DECENAS, OUTPUT);
+  pinMode(UNIDAD, OUTPUT);
+//los common de los 7 segmentos.
+  Serial.begin(9600);
+}
+
+
+void loop()
+{ 
+pressed = KeyPressed();
+//reviso el estado del boton antirrebote y lo guardo pressed. 
+  
+if(pressed == SUBE)
+{
+contador += 1;
+//si KeyPressed() valida el boton sube, se aumenta el contador.
+if (contador > 99){contador=0;}
+//si el contador es mayor a 99 se reasigna a 0.
+}
+  
+if(pressed == BAJA)
+{
+contador -= 1;
+//si KeyPressed() valida el boton baja, se reduce el contador.
+if (contador < 0){ contador=99; }
+//si el contador es mayor a 99 se reasigna a 0.
+}
+  
+if(pressed == RESET) { contador=0; }
+//si KeyPressed() valida el boton reset, el contador se pone en 0.
+  
+PrintContador(contador);
+/*esta funcion incluye la multiplexacion, mostrar los numeros y 
+el calculo de a que parte pertenece el cada digito.*/
+}
+
+
+int KeyPressed()
+{
+//boton antirrebote, verifica que el boton se presione y suelte.
+int sube = digitalRead(SUBE);
+int baja = digitalRead(BAJA);
+int reset = digitalRead(RESET);
+//leo y guardo activamente los valores de los pulsadores
+  
+ 
+  if(sube == 1)
+  { subePrevia = 1; }
+/*si el boton sube se activo, entonces subePrevia guarda que
+que el boton fue activado.*/
+  if(baja == 1)
+  { bajaPrevia = 1; }
+/*si el boton baja se activo, entonces bajaPrevia guarda que
+que el boton fue activado.*/
+  if(reset == 1)
+  { resetPrevia = 1; }
+/*si el boton reset se activo, entonces resetPrevia guarda que
+que el boton fue activado.*/
+  
+  
+  if (sube == 0 && sube != subePrevia)/*
+si se sube es 0 es porque el boton no esta presionado,
+y si subePrevia es 1 es porque "el boton fue presiono y 
+despues se solto".*/
+  {
+    subePrevia = sube;
+//"reiniciamos subePrevia" para que poder volver a verificar la accion.
+    return SUBE;
+//retornamos el valor SUBE, verificando que sube se "valido".
+  }
+  
+  if (baja == 0 && baja != bajaPrevia)
+/*si se baja es 0 es porque el boton no esta presionado,
+y si bajaPrevia es 1 es porque "el boton fue presiono y 
+despues se solto".*/
+  {
+    bajaPrevia = baja;
+//"reiniciamos bajaPrevia" para que poder volver a verificar la accion. 
+    return BAJA;
+//retornamos el valor BAJA, verificando que sube se "valido".    
+  }
+
+  if (reset == 0 && reset != resetPrevia)
+/*si se baja es 0 es porque el boton no esta presionado,
+y si bajaPrevia es 1 es porque "el boton fue presiono y 
+despues se solto".*/
+  {
+    resetPrevia = reset;
+//"reiniciamos resetPrevia" para que poder volver a verificar la accion.
+    return RESET;
+  }
+//retornamos el valor RESET, verificando que sube se "valido".
+  
+  
+return 0;
+//retorno 0 no se valido ningun voton.
+}
+
+
+void PrintDigit(int digit)
+{
+//muestra el numero especificado en el display 7 segmentos.
+switch(digit)
+{
+  case 0:
+  {
+    EncenderCero(0);
+    break;
+  }
+    case 1:
+  {
+    EncenderUno(0);
+    break;
+  }
+    case 2:
+  {
+    EncenderDos(0);
+    break;
+  }
+    case 3:
+  {
+    EncenderTres(0);
+    break;
+  }
+    case 4:
+  {
+    EncenderCuatro(0);
+    break;
+  }
+    case 5:
+  {
+    EncenderCinco(0);
+    break;
+  }
+    case 6:
+  {
+    EncenderSeis(0);
+    break;
+  }
+    case 7:
+  {
+    EncenderSiete(0);
+    break;
+  }
+    case 8:
+  {
+    EncenderOcho(0);
+    break;
+  }
+    case 9:
+  {
+    EncenderNueve(0);
+    break;
+  }
+}  
+}
+
+
+void PrintContador(int contador)
+{
+/*se encarga del efecto de "multiplexacion" y genera un bucle encargado
+de mostrar el digito (decena o unidad) en el display correcto.  
+
+Multiplexacion: es el efecto que se produce al alternar el encendido 
+y apagado de los dos 7 segmentos muy rapido, esto produce el efecto 
+visual de la activacion "simultanea"*/
+  
+  PrendeDigito(APAGADO);
+//apagamos los display
+  PrintDigit(contador / 10);
+/*esta cuenta calcula que valor tiene la decena segun el valor del 
+contador, y envia la señal del numero.*/
+  PrendeDigito(DECENAS);
+//encendemos las decenas y "recibimos el numero a imprimir".
+
+  
+  PrendeDigito(APAGADO);
+//apagamos los display
+  PrintDigit(contador - 10 * ((int)contador / 10));
+/*esta cuenta calcula que valor tiene la unidad segun el valor del 
+contador, y envia la señal del numero.*/
+  PrendeDigito(UNIDAD);
+//encendemos las unidad y "recibimos el numero a imprimir".
+}
+
+
+void PrendeDigito(int digito)
+{
+/*se encarga de alternar el estado de los 7 segmentos, mediante
+los common "enviando 0 o 1"*/
+  if (digito == UNIDAD)
+  {
+//si se "activa" la unidad se apaga la decena.
+    digitalWrite(UNIDAD, LOW);
+    digitalWrite(DECENAS, HIGH);
+    delay(TIME_DISPLAY_ON);
+//un delay muy bajo para dar la ilusion de activacion doble.
+  }
+  
+  else if (digito == DECENAS)
+  {
+//si se "activa" la decena se apaga la unidad.
+    digitalWrite(UNIDAD, HIGH);
+    digitalWrite(DECENAS, LOW);
+    delay(TIME_DISPLAY_ON);
+//un delay muy bajo para dar la ilusion de activacion doble.
+  }
+  
+  else
+  {
+    digitalWrite(UNIDAD, HIGH);
+    digitalWrite(DECENAS, HIGH);
+//si no se indica una unidad, ambas se apagan.
+  }
+}
+
+
+void EncenderLed(char ledX, int tiempo)
+{
+//se encarga de encender los led.
+  digitalWrite(ledX, 1);  
+  delay(tiempo);
+}
+
+void ApagarLed(char ledX, int tiempo)
+{
+//se encarga de apagar los led.
+  digitalWrite(ledX, 0);
+  delay(tiempo);
+}
+
+void TitilarLed(char ledX, int tiempo)
+{
+//se encarga de titilar los led.
+  EncenderLed(ledX, tiempo);
+  ApagarLed(ledX, 0);
+} 
+  
+void ApagarTodo()
+{
+//apaga todos los led de los 7 segmentos.
+  ApagarLed(CERO,0);
+  ApagarLed(UNO, 0);
+  ApagarLed(DOS, 0);
+  ApagarLed(TRES,0);
+  ApagarLed(CUATRO,0);
+  ApagarLed(CINCO,0);
+  ApagarLed(SEIS,0);
+}
+
+void EncenderTodo()
+{
+//enciende todos los led de los 7 segmentos.
+  EncenderLed(CERO,0);
+  EncenderLed(UNO, 0);
+  EncenderLed(DOS, 0);
+  EncenderLed(TRES,0);
+  EncenderLed(CUATRO,0);
+  EncenderLed(CINCO,0);
+  EncenderLed(SEIS,0);
+}
+
+/* funciones para activar los led de los 7 segmentos para mostrar el 
+numero especifico*/
+void EncenderCero(int tiempo)
+{	ApagarTodo();
+  	EncenderTodo();  	
+    ApagarLed(CERO, 0);
+    delay(tiempo);    
+}
+
+void EncenderUno(int tiempo)
+{	ApagarTodo();
+    EncenderLed(TRES,0);
+    EncenderLed(SEIS,0);
+    delay(tiempo);    
+}
+
+void EncenderDos(int tiempo)
+{	ApagarTodo();
+    EncenderTodo();
+    ApagarLed(UNO, 0);
+    ApagarLed(SEIS, 0);  
+    delay(tiempo);    
+}
+
+void EncenderTres(int tiempo)
+{	ApagarTodo();
+    EncenderTodo();
+    ApagarLed(UNO, 0);
+    ApagarLed(CUATRO, 0);        
+    delay(tiempo);    
+}
+
+void EncenderCuatro(int tiempo)
+{	ApagarTodo();
+    EncenderTodo();
+    ApagarLed(DOS, 0);
+    ApagarLed(CUATRO, 0);    
+    ApagarLed(CINCO, 0);
+    delay(tiempo);    
+}
+
+void EncenderCinco(int tiempo)
+{	ApagarTodo();
+    EncenderTodo();
+    ApagarLed(TRES, 0);
+    ApagarLed(CUATRO, 0);    
+    delay(tiempo);    
+}
+
+void EncenderSeis(int tiempo)
+{	ApagarTodo();
+    EncenderTodo();
+    ApagarLed(TRES, 0);   
+    delay(tiempo);    
+}
+
+void EncenderSiete(int tiempo)
+{	
+    ApagarTodo();
+    EncenderLed(DOS,0); 
+    EncenderLed(TRES,0);
+    EncenderLed(SEIS,0);
+    delay(tiempo);    
+}
+
+void EncenderOcho(int tiempo)
+{	
+    ApagarTodo();
+    EncenderTodo();
+    delay(tiempo);
+}
+
+void EncenderNueve(int tiempo)
+{	
+    ApagarTodo();
+    EncenderTodo();
+    ApagarLed(CUATRO, 0);  
+    ApagarLed(CINCO, 0);  
+    delay(tiempo);
+}
