@@ -19,6 +19,7 @@ Esta funcion a su vez utiliza a sus vez otras 2 funciones:
 
 PrendeDigito: (que recibe 3 estados Unidad - Decenas o por defecto "cualquier otro valor") y a travez de los common 
 de los 2 display, activa o desactiva el display indicado.
+
 PrintDigit: que enciende los los correctos para formar el numero indicado.
 
 ~~~ C (lenguaje en el que esta escrito)
@@ -49,7 +50,7 @@ contador, y envia la señal del numero.*/
 ~~~
 
 ## :robot: Link al proyecto
-- [proyecto]([https://www.tinkercad.com/things/aOYiibnDjWu](https://www.tinkercad.com/things/fjnY7L9EdeY-p1-parcial-domiciliario-1b-leon-gabriel-martinez-aquino/editel?sharecode=v86fY4R__D4DXNCbGvJF2T4yYxvQ_uRqjpWTVksz6jI)https://www.tinkercad.com/things/fjnY7L9EdeY-p1-parcial-domiciliario-1b-leon-gabriel-martinez-aquino/editel?sharecode=v86fY4R__D4DXNCbGvJF2T4yYxvQ_uRqjpWTVksz6jI)
+- [proyecto]([https://www.tinkercad.com/things/aOYiibnDjWu](https://www.tinkercad.com/things/fjnY7L9EdeY-p1-parcial-domiciliario-1b-leon-gabriel-martinez-aquino/editel?sharecode=v86fY4R__D4DXNCbGvJF2T4yYxvQ_uRqjpWTVksz6jI)https://www.tinkercad.com/things/fjnY7L9EdeY-p1-parcial-domiciliario-1b-leon-gabriel-martinez-aquino/editel?sharecode=v86fY4R__D4DXNCbGvJF2T4yYxvQ_uRqjpWTVksz6jI])
 
 ---
 ### Fuentes
