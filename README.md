@@ -8,7 +8,8 @@
 
 
 ## Descripción
-En este parrafo deberan describir que funcion cumple su proyecto. Que solucion esta ofreciendo.
+Contador del 0 al 99, utilizando dos display 7 segmentos, utilizando la tecnica de multiplexacion y controlando el 
+numero del contador por medio de 3 botones (boton "sube" - boton "baja" - boton "reset").
 
 ## Función principal
 Esta funcion se encarga de encender y apagar los leds.
