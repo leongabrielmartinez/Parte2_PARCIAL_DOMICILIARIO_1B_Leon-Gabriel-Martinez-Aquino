@@ -12,19 +12,19 @@ Contador del 0 al 99, utilizando dos display 7 segmentos, utilizando la tecnica 
 numero del contador por medio de 3 botones (boton "sube" - boton "baja" - boton "reset").
 
 ## Función principal
-Esta funcion se realiza el efecto de "multiplexacion" y genera un bucle encargado
-de mostrar el digito (decena o unidad) en el display correcto. 
+Esta funcion realiza el efecto de "multiplexacion" y genera un bucle encargado
+de calcular y mostrar el digito (decena o unidad) en el display correcto. 
 
-B0, B1, B2, B3 son #define que utilizamos para agregar los leds, asociandolo a pines de la placa arduino.
+Esta funcion a su vez utiliza a sus vez otras 2 funciones:
 
-(Breve explicación de la función)
+PrendeDigito: (que recibe 3 estados Unidad - Decenas o por defecto "cualquier otro valor") y a travez de los common 
+de los 2 display, activa o desactiva el display indicado.
+PrintDigit: que enciende los los correctos para formar el numero indicado.
 
 ~~~ C (lenguaje en el que esta escrito)
 void PrintContador(int contador)
 {
-/*se encarga del efecto de "multiplexacion" y genera un bucle encargado
-de mostrar el digito (decena o unidad) en el display correcto.  
-
+/*
 Multiplexacion: es el efecto que se produce al alternar el encendido 
 y apagado de los dos 7 segmentos muy rapido, esto produce el efecto 
 visual de la activacion "simultanea"*/
@@ -49,22 +49,11 @@ contador, y envia la señal del numero.*/
 ~~~
 
 ## :robot: Link al proyecto
-- [proyecto](https://www.tinkercad.com/things/aOYiibnDjWu)
-## :tv: Link al video del proceso
-- [video](https://www.youtube.com/watch?v=VyGjE8kx-O0)
+- [proyecto]([https://www.tinkercad.com/things/aOYiibnDjWu](https://www.tinkercad.com/things/fjnY7L9EdeY-p1-parcial-domiciliario-1b-leon-gabriel-martinez-aquino/editel?sharecode=v86fY4R__D4DXNCbGvJF2T4yYxvQ_uRqjpWTVksz6jI)https://www.tinkercad.com/things/fjnY7L9EdeY-p1-parcial-domiciliario-1b-leon-gabriel-martinez-aquino/editel?sharecode=v86fY4R__D4DXNCbGvJF2T4yYxvQ_uRqjpWTVksz6jI)
 
 ---
 ### Fuentes
-- [Consejos para documentar](https://www.sohamkamani.com/how-to-write-good-documentation/#architecture-documentation).
-
-- [Lenguaje Markdown](https://markdown.es/sintaxis-markdown/#linkauto).
-
-- [Markdown Cheatsheet](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet).
-
-- [Tutorial](https://www.youtube.com/watch?v=oxaH9CFpeEE).
-
-- [Emojis](https://gist.github.com/rxaviers/7360908).
-
+- [SPD clase 4](https://www.youtube.com/watch?v=_Ry7mtURGDE&list=PL7LaR6_A2-E11BQXtypHMgWrSR-XOCeyD&index=4&t=1087s).
 ---
 
 
