@@ -4,57 +4,47 @@
 
 
 ## Proyecto: Parte 1 Parcial Domiciliario SPD.
-![Tinkercad](img/imagenP1SPD.png)
+![Tinkercad](img/imagenP2SPD.png)
 
 
 ## Descripción
-Contador del 0 al 99, utilizando dos display 7 segmentos, utilizando la tecnica de multiplexacion y controlando el 
-numero del contador por medio de 3 botones (boton "sube" - boton "baja" - boton "reset").
+Contador del 0 al 99 que aumenta automaticamente con el tiempo, mostrandose con dos display 7 segmentos (utilizando la tecnica de multiplexacion) y segun la posicion del switch mostrar (solo numero primos o todos los numeros).
+
+Ademas un se utiliza un motor de corriente continua y sensor de temperatura analogico, el motor gira a una velocidad determinada con el siguiente calculo (valor del contador + temperatura medida por el sensor TMP + 31) y si los 2 valores "relativos" son max se puede alcanzan el max voltaje entregado por ArduinoUno "255" logrando que el motor gire a 5555 rpm.
+
+Existe la siguiente condicion unica: si el switch indica que se muestren numeros del 0 al 99 y la temperatura medida por el sensor TMP es de -40 el motor se apaga.
 
 ## Función principal
-Esta funcion realiza el efecto de "multiplexacion" y genera un bucle encargado
-de calcular y mostrar el digito (decena o unidad) en el display correcto. 
-
-Esta funcion a su vez utiliza a sus vez otras 2 funciones:
-
-PrendeDigito: (que recibe 3 estados Unidad - Decenas o por defecto "cualquier otro valor") y a travez de los common 
-de los 2 display, activa o desactiva el display indicado.
-
-PrintDigit: que enciende los los correctos para formar el numero indicado.
+Esta funcion aumenta el contador si la diferencia entre el tiempo guardado en "previoMillis" y "actualMillis", es igual o mayor al tiempo definido en la constante "INTERVALO". 
 
 ~~~ C (lenguaje en el que esta escrito)
-void PrintContador(int contador)
+void AumentarContador()
+/*esta funcion sive para aumentar el contador segun el tiempo
+indicado en el intervalo.*/
 {
+  unsigned long actualMillis = millis();
+/*unsigned long ("se usa para definir que el numero no puede 
+ser negativo").*/
+  
+  if (actualMillis - previoMillis >= intervalo)
 /*
-Multiplexacion: es el efecto que se produce al alternar el encendido 
-y apagado de los dos 7 segmentos muy rapido, esto produce el efecto 
-visual de la activacion "simultanea"*/
-  
-  PrendeDigito(APAGADO);
-//apagamos los display
-  PrintDigit(contador / 10);
-/*esta cuenta calcula que valor tiene la decena segun el valor del 
-contador, y envia la señal del numero.*/
-  PrendeDigito(DECENAS);
-//encendemos las decenas y "recibimos el numero a imprimir".
-
-  
-  PrendeDigito(APAGADO);
-//apagamos los display
-  PrintDigit(contador - 10 * ((int)contador / 10));
-/*esta cuenta calcula que valor tiene la unidad segun el valor del 
-contador, y envia la señal del numero.*/
-  PrendeDigito(UNIDAD);
-//encendemos las unidad y "recibimos el numero a imprimir".
+si la diferencia entre el tiempo actual y el previo
+es mayor o igual al intervalo entonces aumento el contador
+*/  
+  {
+   previoMillis = actualMillis;
+//actualizo el tiempo previo
+   contador += 1;
+  }    
 }
 ~~~
 
 ## :robot: Link al proyecto
-- [proyecto](https://www.tinkercad.com/things/fjnY7L9EdeY-p1-parcial-domiciliario-1b-leon-gabriel-martinez-aquino/editel?sharecode=v86fY4R__D4DXNCbGvJF2T4yYxvQ_uRqjpWTVksz6jI)
+- [proyecto](https://www.tinkercad.com/things/e1GW79EsyvE-p2-parcial-domiciliario-1b-leon-gabriel-martinez-aquino/editel?sharecode=T1NYO68wBXTzqwvMXw6FkoGEoI0u27wxiqBQMPOK10Y)
 
 ---
 ### Fuentes
-- [SPD clase 4](https://www.youtube.com/watch?v=_Ry7mtURGDE&list=PL7LaR6_A2-E11BQXtypHMgWrSR-XOCeyD&index=4&t=1087s).
+- Distintos sitios web.
 ---
 
 
