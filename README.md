@@ -10,7 +10,7 @@
 ## Descripción
 Contador del 0 al 99 que aumenta automaticamente con el tiempo, mostrandose con dos display 7 segmentos (utilizando la tecnica de multiplexacion) y segun la posicion del switch mostrar (solo numero primos o todos los numeros).
 
-Ademas un se utiliza un motor de corriente continua y sensor de temperatura analogico, el motor gira a una velocidad determinada con el siguiente calculo (valor del contador + temperatura medida por el sensor TMP + 31) y si los 2 valores "relativos" son max se puede alcanzan el max voltaje entregado por ArduinoUno "255" logrando que el motor gire a 5555 rpm.
+Ademas se utiliza un motor de corriente continua y sensor de temperatura analogico, el motor gira a una velocidad determinada con el siguiente calculo (valor del contador + temperatura medida por el sensor TMP + 31) y si los 2 valores "relativos" son max se puede alcanzan el max voltaje entregado por ArduinoUno "255" logrando que el motor gire a 5555 rpm.
 
 Existe la siguiente condicion unica: si el switch indica que se muestren numeros del 0 al 99 y la temperatura medida por el sensor TMP es de -40 el motor se apaga.
 
