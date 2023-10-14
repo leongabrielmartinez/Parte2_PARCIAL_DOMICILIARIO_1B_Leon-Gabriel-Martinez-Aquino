@@ -3,7 +3,7 @@
 
 
 
-## Proyecto: Parte 1 Parcial Domiciliario SPD.
+## Proyecto: Parte 2 Parcial Domiciliario SPD.
 ![Tinkercad](img/imagenP2SPD.png)
 
 
