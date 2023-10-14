@@ -1,10 +1,6 @@
-# Ejemplo Documentación 
-![Tinkercad](./img/ArduinoTinkercad.jpg)
-
-
 ## Integrantes 
-- Esteban M. Quiroz
-- Dario Cuda 
+- Leon Gabriel Martinez Aquino - 1B
+
 
 
 ## Proyecto: Contador binario.
