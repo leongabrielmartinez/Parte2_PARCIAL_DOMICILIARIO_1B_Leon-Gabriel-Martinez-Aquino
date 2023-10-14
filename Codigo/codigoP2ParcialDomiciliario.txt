@@ -1,11 +1,17 @@
 /*
 -----------CONSIGNA PRIMER PARCIAL----------------------------------
-Diseñar un contador de 0 a 99 utilizando dos displays de 7 segmentos y tres botones para
-controlar la cuenta. Debes implementar la técnica de multiplexación para mostrar los dígitos
-en los displays. El contador debe comenzar en 0 y debe ser capaz de aumentar o disminuir
-su valor en una unidad con los botones.
+1. Sustituye uno de los botones por un interruptor deslizante (switch) de dos posiciones.
+Dependiendo de la posición del interruptor, el display debe mostrar o bien el contador (como
+en la Parte 1) o los números primos en el rango de 0 a 99.
+2. Investiga un componente electrónico adicional que podría mejorar este proyecto.
+Proporciona una descripción detallada del componente, su función y cómo se podría
+integrar en el proyecto.
+
+Investigar en la semana y agregar uno de los siguientes componentes:
+-Sensor de flexión
+-Sensor de fuerza
+-Sensor de temperatura
 ---------------------------------------------------------------------
-*/
 #define CERO 10
 #define UNO 11
 #define DOS 12
@@ -14,9 +20,7 @@ su valor en una unidad con los botones.
 #define CINCO 6
 #define SEIS 5
 
-#define RESET 2
-#define SUBE 3
-#define BAJA 4
+#define INTERRUPTOR_SWITCH 2
 
 #define DECENAS A5
 #define UNIDAD A4
@@ -24,18 +28,28 @@ su valor en una unidad con los botones.
 #define TIME_DISPLAY_ON 10
 //tiempo de alternado en la multiplexacion 
 #define APAGADO 0
+
+#define INTERVALO 300
+//intervalo para aumentar el contador segun el tiempo
+
 //constantes
-int sube = 0;
-int baja= 0;
-int reset = 0;
 
-int subePrevia = 0;
-int bajaPrevia = 0;
-int resetPrevia = 0;
+unsigned long previoMillis = 0;
+//unsigned long ("se usa para definir que el numero no puede 
+//ser negativo")
 
+int ultimoPrimoEncontrado = 0;
 int contador = 0;
-int pressed = 0;
 //variables
+
+#define SENSOR_TMP A0
+int lecturasTemperatura = 0;
+//sensor de temperatura
+
+#define MOTORCC 9
+int velocidad = 0;
+//motor cc
+
 
 
 void setup()
@@ -47,107 +61,125 @@ void setup()
   pinMode(CUATRO, OUTPUT);
   pinMode(CINCO, OUTPUT);
   pinMode(SEIS, OUTPUT);
-//salidas conectadas a los led de los 7 segmentos.
-  pinMode(RESET, INPUT_PULLUP);
-  pinMode(SUBE, INPUT_PULLUP);
-  pinMode(BAJA, INPUT_PULLUP);
-//botones.
+  
+  pinMode(INTERRUPTOR_SWITCH, INPUT_PULLUP);  
+  
   pinMode(DECENAS, OUTPUT);
   pinMode(UNIDAD, OUTPUT);
-//los common de los 7 segmentos.
+  
+  pinMode(SENSOR_TMP, INPUT);
+  //sensor temperatura
+  
+  pinMode(MOTORCC, OUTPUT);
+  //motor
+
   Serial.begin(9600);
 }
 
 
 void loop()
-{ 
-pressed = KeyPressed();
-//reviso el estado del boton antirrebote y lo guardo pressed. 
-  
-if(pressed == SUBE)
 {
-contador += 1;
-//si KeyPressed() valida el boton sube, se aumenta el contador.
-if (contador > 99){contador=0;}
-//si el contador es mayor a 99 se reasigna a 0.
+if (digitalRead(INTERRUPTOR_SWITCH)==1)
+//si el switch esta apagado muestro solo numeros primos.
+{
+  PrintContadorNumerosPrimos(contador);
+//muestro solo numeros primos
+  velocidad = (contador + lecturasTemperatura) + 31;
+/*la velocidad se calcula sumando el contador y los valores del 
+sensor de temperatura y se le suma 26 (para alcanzar el voltaje max
+entregado por arduino "255") */   
+  analogWrite(MOTORCC, velocidad);   
+}
+
+  
+else
+//si el switch esta prendido muestro todos los numeros "0-99".
+{
+  PrintContador(contador); 
+  velocidad = (contador + lecturasTemperatura) + 31;
+/*la velocidad se calcula sumando el contador y los valores del 
+sensor de temperatura y se le suma 26 (para alcanzar el voltaje max
+entregado por arduino "255") */ 
+  
+  if(lecturasTemperatura == -40)
+//si la temperatura es -40 el motor se apaga    
+  {
+  velocidad = 0;
+  } 
+  analogWrite(MOTORCC, velocidad);
 }
   
-if(pressed == BAJA)
-{
-contador -= 1;
-//si KeyPressed() valida el boton baja, se reduce el contador.
-if (contador < 0){ contador=99; }
-//si el contador es mayor a 99 se reasigna a 0.
-}
+    
+AumentarContador();
   
-if(pressed == RESET) { contador=0; }
-//si KeyPressed() valida el boton reset, el contador se pone en 0.
   
-PrintContador(contador);
-/*esta funcion incluye la multiplexacion, mostrar los numeros y 
-el calculo de a que parte pertenece el cada digito.*/
+if (contador >= 99)
+//si el contador llega a 99 se reinicia.
+  {
+    contador = 0;
+  }
+  
+lecturasTemperatura = map(analogRead(SENSOR_TMP),20,358, -40,125);
+/*lee los valores de el sensor de temperatura y hace la 
+convercion de valores que indican la temperatura*/ 
 }
 
 
-int KeyPressed()
+void AumentarContador()
+/*esta funcion sive para aumentar el contador segun el tiempo
+indicado en el intervalo.*/
 {
-//boton antirrebote, verifica que el boton se presione y suelte.
-int sube = digitalRead(SUBE);
-int baja = digitalRead(BAJA);
-int reset = digitalRead(RESET);
-//leo y guardo activamente los valores de los pulsadores
+  unsigned long actualMillis = millis();
+/*unsigned long ("se usa para definir que el numero no puede 
+ser negativo").*/
   
- 
-  if(sube == 1)
-  { subePrevia = 1; }
-/*si el boton sube se activo, entonces subePrevia guarda que
-que el boton fue activado.*/
-  if(baja == 1)
-  { bajaPrevia = 1; }
-/*si el boton baja se activo, entonces bajaPrevia guarda que
-que el boton fue activado.*/
-  if(reset == 1)
-  { resetPrevia = 1; }
-/*si el boton reset se activo, entonces resetPrevia guarda que
-que el boton fue activado.*/
-  
-  
-  if (sube == 0 && sube != subePrevia)/*
-si se sube es 0 es porque el boton no esta presionado,
-y si subePrevia es 1 es porque "el boton fue presiono y 
-despues se solto".*/
+  if (actualMillis - previoMillis >= INTERVALO)
+/*
+si la diferencia entre el tiempo actual y el previo
+es mayor o igual al intervalo entonces aumento el contador
+*/  
   {
-    subePrevia = sube;
-//"reiniciamos subePrevia" para que poder volver a verificar la accion.
-    return SUBE;
-//retornamos el valor SUBE, verificando que sube se "valido".
-  }
-  
-  if (baja == 0 && baja != bajaPrevia)
-/*si se baja es 0 es porque el boton no esta presionado,
-y si bajaPrevia es 1 es porque "el boton fue presiono y 
-despues se solto".*/
-  {
-    bajaPrevia = baja;
-//"reiniciamos bajaPrevia" para que poder volver a verificar la accion. 
-    return BAJA;
-//retornamos el valor BAJA, verificando que sube se "valido".    
-  }
+   previoMillis = actualMillis;
+//actualizo el tiempo previo
+   contador += 1;
+  }    
+}
 
-  if (reset == 0 && reset != resetPrevia)
-/*si se baja es 0 es porque el boton no esta presionado,
-y si bajaPrevia es 1 es porque "el boton fue presiono y 
-despues se solto".*/
-  {
-    resetPrevia = reset;
-//"reiniciamos resetPrevia" para que poder volver a verificar la accion.
-    return RESET;
-  }
-//retornamos el valor RESET, verificando que sube se "valido".
+
+bool CalcularNumerosPrimos(int numero)
+{
+//valida si un numero es primo
+    if (numero <= 1) 
+    {
+        return false;
+    }
+//el 0 y el 1 no son numeros primos
+    else if (numero <= 3) 
+    {
+        return true;
+    }
+//casos especiales para 2 y 3
   
+    if (numero % 2 == 0 || numero % 3 == 0) 
+//Si es divisible por 2 o 3, no es primo
+    {
+        return false;
+    }
   
-return 0;
-//retorno 0 no se valido ningun voton.
+    int i = 5;
+    while (i * i <= numero)
+/*Comprobar divisibilidad por números de la forma 6k ± 1.
+este proceso busca divisores, si los encuentra es porque 
+el numero no es primo.*/
+    {
+        if (numero % i == 0 || numero % (i + 2) == 0) 
+        {
+            return false;
+        }
+        i += 6;
+    }
+    return true;
+// Si no se encontraron divisores, el número es primo
 }
 
 
@@ -207,6 +239,20 @@ switch(digit)
     break;
   }
 }  
+}
+
+void PrintContadorNumerosPrimos(int contador)
+{
+//imprime el ultimo numero primo hasta que aparezca otro.
+if (CalcularNumerosPrimos(contador))
+  {
+  PrintContador(contador);
+  ultimoPrimoEncontrado = contador;
+  }
+else
+{
+  PrintContador(ultimoPrimoEncontrado);
+} 
 }
 
 
