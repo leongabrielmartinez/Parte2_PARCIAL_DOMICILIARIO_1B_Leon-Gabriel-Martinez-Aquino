@@ -59,7 +59,7 @@ Ademas en esta tercera configuracion el motor alcanza una velocidad maxima de 38
 ## Sensor de temperatura:
 En tinkercad el sensor de temparatura mide en el siguiente rango de temperaturas: -40c a 125c.
 
-El sensor de temperatura tiene 3 pines (5 volts, gnd y entrada analogica), el sensor al hacer uso de los 5 volts y devuelve una cantidad de voltaje especifico para indicar la temperatura (ej. 100mV para -40ºC y 1750mV para 125ºC).
+El sensor de temperatura tiene 3 pines (5 volts, gnd y pin analogico), el sensor al hacer uso de los 5 volts y devuelve una cantidad de voltaje especifico al pin analogico para indicar la temperatura (ej. 100mV para -40ºC y 1750mV para 125ºC).
 
 Atravez de la funcion map() se reliza la conversion del voltaje entregado por el sensor para poder calcular la temperatura.
 
